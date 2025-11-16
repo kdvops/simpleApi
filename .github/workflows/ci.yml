@@ -48,7 +48,7 @@ jobs:
 
       - name: Build & Push Image
         run: |
-          docker build -t mydocker/myapp:${{ github.sha }} .
+          docker build -t mydocker/myapp:${{ github.sha }} ./App
        #   docker push mydocker/myapp:${{ github.sha }}
 
   deploy:

@@ -1,10 +1,16 @@
-import { jest } from '@jest/globals';
-
+import { jest } from "@jest/globals";
 import request from "supertest";
-import app from "../src/server.js";
-import pool from "../src/db.js";
 
-jest.mock("../src/db.js");
+// --- 🔥 MOCK explícito del módulo db.js ---
+jest.unstable_mockModule("../src/db.js", () => ({
+  default: {
+    query: jest.fn()
+  }
+}));
+
+// --- 🔥 Importar luego de definir el mock ---
+const app = (await import("../src/server.js")).default;
+const pool = (await import("../src/db.js")).default;
 
 describe("API MySQL Tests", () => {
 
@@ -15,7 +21,7 @@ describe("API MySQL Tests", () => {
       { id: 2, nombre: "Maria", email: "maria@mail.com" }
     ];
 
-    pool.query.mockResolvedValue([mockData]); // mock query
+    pool.query.mockResolvedValue([mockData]);
 
     const res = await request(app).get("/api/usuarios");
 
@@ -42,7 +48,7 @@ describe("API MySQL Tests", () => {
 
   test("GET /api/usuarios/99 retorna 404", async () => {
 
-    pool.query.mockResolvedValue([[]]); // Sin resultados
+    pool.query.mockResolvedValue([[]]);
 
     const res = await request(app).get("/api/usuarios/99");
 

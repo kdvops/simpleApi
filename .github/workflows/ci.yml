@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: Full CI/CD
 
 on:
   push:
@@ -26,3 +26,43 @@ jobs:
       - name: Run Tests
         working-directory: ./App
         run: npm test
+
+      #- name: Sonar Scan
+      #  uses: sonarsource/sonarqube-scan-action@v2
+      #  env:
+      #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #    SONAR_HOST_URL: ${{ secrets.SONAR_HOST }}
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v4
+
+      #- name: Login to Docker Hub
+      #  uses: docker/login-action@v3
+      #  with:
+      #    username: ${{ secrets.DOCKER_USER }}
+      #    password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build & Push Image
+        run: |
+          docker build -t mydocker/myapp:${{ github.sha }} .
+       #   docker push mydocker/myapp:${{ github.sha }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: docker
+    
+    steps:
+      - name: Deploy to K8s via kubectl
+        uses: azure/k8s-deploy@v4
+        with:
+          manifests: |
+            k8s/deployment.yaml
+          images: |
+            mydocker/myapp:${{ github.sha }}
+          namespace: production
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}

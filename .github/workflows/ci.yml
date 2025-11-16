@@ -27,11 +27,15 @@ jobs:
         working-directory: ./App
         run: npm test
 
-      #- name: Sonar Scan
-      #  uses: sonarsource/sonarqube-scan-action@v2
-      #  env:
-      #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      #    SONAR_HOST_URL: ${{ secrets.SONAR_HOST }}
+      - name: Sonar Scan
+        uses: sonarsource/sonarqube-scan-action@v4.2.2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: "https://sonarcloud.i"
+
+
+
+          
 
   docker:
     runs-on: ubuntu-latest

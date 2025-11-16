@@ -60,13 +60,19 @@ jobs:
     needs: docker
     
     steps:
-      - name: Deploy to K8s via kubectl
-        uses: azure/k8s-deploy@v4
-        with:
-          manifests: |
-            k8s/deployment.yaml
-          images: |
-            mydocker/myapp:${{ github.sha }}
-          namespace: production
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
+
+      - name: Despliegue
+        working-directory: ./App
+        run: echo "tarea de despliegue"
+
+      
+      #- name: Deploy to K8s via kubectl
+      #  uses: azure/k8s-deploy@v4
+      #  with:
+      #    manifests: |
+      #      k8s/deployment.yaml
+      #    images: |
+      #      mydocker/myapp:${{ github.sha }}
+      #    namespace: production
+      #  env:
+      #    KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}

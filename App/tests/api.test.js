@@ -1,3 +1,5 @@
+import { jest } from '@jest/globals';
+
 import request from "supertest";
 import app from "../src/server.js";
 import pool from "../src/db.js";

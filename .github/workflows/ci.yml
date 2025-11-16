@@ -52,8 +52,9 @@ jobs:
 
       - name: Build & Push Image
         run: |
-          docker build -t silencfox/simpleapi:${{ github.sha }} ./App
-          docker push silencfox/simpleapi:${{ github.sha }}
+          docker build -t silencfox/simpleapi:latest ./App
+          docker push silencfox/simpleapi:latest
+          #docker push silencfox/simpleapi:${{ github.sha }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -62,7 +63,6 @@ jobs:
     steps:
 
       - name: Despliegue
-        working-directory: ./App
         run: echo "tarea de despliegue"
 
       

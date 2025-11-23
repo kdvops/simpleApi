@@ -1,7 +1,9 @@
 # simpleApi
 
 docker network create mynet
+###
 docker volume create mysql_data
+###
 docker build -t simpleapi .
 
 
